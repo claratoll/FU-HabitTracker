@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D90AC0D29F0289E0010BF9C /* FormattedDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC0C29F0289E0010BF9C /* FormattedDate.swift */; };
+		1D90AC0F29F0290F0010BF9C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC0E29F0290F0010BF9C /* CalendarView.swift */; };
+		1D90AC1229F0299E0010BF9C /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 1D90AC1129F0299E0010BF9C /* FSCalendar */; };
 		1DE2AA8B29EE8A9400C5B044 /* FU_HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE2AA8A29EE8A9400C5B044 /* FU_HabitTrackerApp.swift */; };
 		1DE2AA8D29EE8A9400C5B044 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE2AA8C29EE8A9400C5B044 /* ContentView.swift */; };
 		1DE2AA8F29EE8A9700C5B044 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DE2AA8E29EE8A9700C5B044 /* Assets.xcassets */; };
@@ -44,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D90AC0C29F0289E0010BF9C /* FormattedDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedDate.swift; sourceTree = "<group>"; };
+		1D90AC0E29F0290F0010BF9C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		1DE2AA8729EE8A9400C5B044 /* FU-HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FU-HabitTracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DE2AA8A29EE8A9400C5B044 /* FU_HabitTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FU_HabitTrackerApp.swift; sourceTree = "<group>"; };
 		1DE2AA8C29EE8A9400C5B044 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -69,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DE2AABE29EE8EFF00C5B044 /* FirebaseAuth in Frameworks */,
+				1D90AC1229F0299E0010BF9C /* FSCalendar in Frameworks */,
 				1DE2AAC029EE8EFF00C5B044 /* FirebaseFirestore in Frameworks */,
 				1DE2AAC229EE8EFF00C5B044 /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -122,6 +128,7 @@
 				1DE2AAB429EE8D7F00C5B044 /* Habit.swift */,
 				1DE2AAB629EE8DC000C5B044 /* HabitListVM.swift */,
 				1DE2AACC29EE9C7B00C5B044 /* Extensions.swift */,
+				1D90AC0C29F0289E0010BF9C /* FormattedDate.swift */,
 			);
 			path = "FU-HabitTracker";
 			sourceTree = "<group>";
@@ -158,6 +165,7 @@
 				1DE2AAC929EE99F700C5B044 /* RowView.swift */,
 				1DE2AAC329EE995600C5B044 /* SignInView.swift */,
 				1DE2AA8C29EE8A9400C5B044 /* ContentView.swift */,
+				1D90AC0E29F0290F0010BF9C /* CalendarView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -182,6 +190,7 @@
 				1DE2AABD29EE8EFF00C5B044 /* FirebaseAuth */,
 				1DE2AABF29EE8EFF00C5B044 /* FirebaseFirestore */,
 				1DE2AAC129EE8EFF00C5B044 /* FirebaseFirestoreSwift */,
+				1D90AC1129F0299E0010BF9C /* FSCalendar */,
 			);
 			productName = "FU-HabitTracker";
 			productReference = 1DE2AA8729EE8A9400C5B044 /* FU-HabitTracker.app */;
@@ -257,6 +266,7 @@
 			mainGroup = 1DE2AA7E29EE8A9400C5B044;
 			packageReferences = (
 				1DE2AABC29EE8EFF00C5B044 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1D90AC1029F0299D0010BF9C /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			productRefGroup = 1DE2AA8829EE8A9400C5B044 /* Products */;
 			projectDirPath = "";
@@ -305,7 +315,9 @@
 				1DE2AA8D29EE8A9400C5B044 /* ContentView.swift in Sources */,
 				1DE2AACA29EE99F700C5B044 /* RowView.swift in Sources */,
 				1DE2AACD29EE9C7B00C5B044 /* Extensions.swift in Sources */,
+				1D90AC0D29F0289E0010BF9C /* FormattedDate.swift in Sources */,
 				1DE2AA8B29EE8A9400C5B044 /* FU_HabitTrackerApp.swift in Sources */,
+				1D90AC0F29F0290F0010BF9C /* CalendarView.swift in Sources */,
 				1DE2AAC829EE99B200C5B044 /* HabitListView.swift in Sources */,
 				1DE2AAB729EE8DC000C5B044 /* HabitListVM.swift in Sources */,
 				1DE2AAC429EE995600C5B044 /* SignInView.swift in Sources */,
@@ -629,6 +641,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1D90AC1029F0299D0010BF9C /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		1DE2AABC29EE8EFF00C5B044 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -640,6 +660,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1D90AC1129F0299E0010BF9C /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D90AC1029F0299D0010BF9C /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
 		1DE2AABD29EE8EFF00C5B044 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1DE2AABC29EE8EFF00C5B044 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

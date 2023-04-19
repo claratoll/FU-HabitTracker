@@ -27,13 +27,13 @@ class HabitListVM : ObservableObject {
         }
     }
     
-    func saveToFirestore(habitName : String){
+    func saveToFirestore(habitName : String, dateAdded: Date){
         
         guard let user = auth.currentUser else {return}
         let habitsref = db.collection("users").document(user.uid).collection("habits")
         
         
-        let habit = Habit(name: habitName)
+        let habit = Habit(name: habitName, dateAdded: dateAdded)
         do {
             try habitsref.addDocument(from: habit)
         } catch {

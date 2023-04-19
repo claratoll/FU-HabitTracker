@@ -12,8 +12,8 @@ struct Habit : Codable, Identifiable {
     @DocumentID var id: String?
     var name : String
     var done: Bool = false
-    var date: Date?
-    var weekday: String?
+    var todaysDate: Date?
+    var dateAdded: Date?
     var color: String?
     
 }
