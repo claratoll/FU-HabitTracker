@@ -15,6 +15,7 @@ struct CalendarView: View {
             DatePicker("Select Date", selection: $selectedDate,
                        in: ...Date(), displayedComponents: .date)
                 .datePickerStyle(.graphical)
+                .accentColor(Color.ui.blueGray)
            // FormattedDate(selectedDate: selectedDate, omitTime: true)
         }
     }
