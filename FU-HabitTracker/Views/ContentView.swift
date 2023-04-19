@@ -17,12 +17,10 @@ struct ContentView: View {
             } else {
                 HabitListView()
             }
+        
     }
 }
         
-
-
-
 
 
 struct ContentView_Previews: PreviewProvider {

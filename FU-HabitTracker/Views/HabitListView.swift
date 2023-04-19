@@ -14,8 +14,8 @@ struct HabitListView: View {
     @State var newHabitName = ""
     
     var body: some View {
-
             VStack {
+                CalendarView()
                 List {
                     ForEach(habitListVM.habits){ habit in
                         RowView(habit: habit, vm: habitListVM)
@@ -27,6 +27,7 @@ struct HabitListView: View {
                     }
                 }
                 
+                
                 Button(action: {
                     showingAddAlert = true
                 }) {
@@ -35,14 +36,12 @@ struct HabitListView: View {
                 .alert("Lägg till", isPresented: $showingAddAlert){
                     TextField("lägg till", text: $newHabitName)
                     Button("add", action: {
-                        habitListVM.saveToFirestore(habitName: newHabitName)
+                        habitListVM.saveToFirestore(habitName: newHabitName, dateAdded: Date())
                         newHabitName = ""
                     })
                 }
             }
-            .padding(.top, 50)
-        // add padding to move the content down so that it doesn't overlap with the status bar
-        
+       
         .onAppear(){
             habitListVM.listenToFirestore()
         }
