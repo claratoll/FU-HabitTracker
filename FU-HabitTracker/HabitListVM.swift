@@ -17,14 +17,23 @@ class HabitListVM : ObservableObject {
     let auth = Auth.auth()
     
     
-    func toggle (habit: Habit) {
+    func toggle (habit: Habit, selectedDate : Date) {
         
-        guard let user = auth.currentUser else {return}
-        let habits = db.collection("users").document(user.uid).collection("habits")
-        
-        if let id = habit.id {
-            habits.document(id).updateData(["done" : !habit.done ])
-        }
+        guard let user = auth.currentUser else { return }
+            let habits = db.collection("users").document(user.uid).collection("habits")
+
+            if let id = habit.id {
+                let newDoneValue = !habit.done
+                let newCompletedDays: [Date]
+                if newDoneValue {
+                    // Add today's date to the completedDays array
+                    newCompletedDays = habit.completedDays + [selectedDate]
+                } else {
+                    // Remove today's date from the completedDays array
+                    newCompletedDays = habit.completedDays.filter { !Calendar.current.isDate($0, inSameDayAs: selectedDate) }
+                }
+                habits.document(id).updateData(["done": newDoneValue, "completedDays": newCompletedDays])
+            }
     }
     
     func saveToFirestore(habitName : String, dateAdded: Date){

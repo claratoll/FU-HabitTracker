@@ -15,5 +15,5 @@ struct Habit : Codable, Identifiable {
     var todaysDate: Date?
     var dateAdded: Date?
     var color: String?
-    
+    var completedDays: [Date] = []
 }

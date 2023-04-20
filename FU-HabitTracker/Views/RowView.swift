@@ -8,22 +8,25 @@
 import SwiftUI
 
 
-
-
 struct RowView: View {
     let habit : Habit
+    let selectedDate: Date
+    let defaultDate = Date()
     let vm : HabitListVM
-    
+    @State var isSelected = false
+
     var body: some View{
         VStack(spacing: 0){
             HStack{
                 Text(habit.name)
                 Spacer()
                 Button(action : {
-                    vm.toggle(habit: habit)
+                    isSelected.toggle()
+                    vm.toggle(habit: habit, selectedDate: selectedDate)
                 }) {
-                    Image(systemName: habit.done ? "checkmark.square" : "square")
+                    Image(systemName: isSelected ? "checkmark.square.fill" : "square")
                 }
+
             }
             .padding(.vertical)
             .padding(.horizontal)

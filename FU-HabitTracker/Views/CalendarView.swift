@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CalendarView: View {
     @State var selectedDate = Date()
+    @State var completedDays: [Date] = []
     
     var body: some View {
         VStack {
@@ -16,7 +17,17 @@ struct CalendarView: View {
                        in: ...Date(), displayedComponents: .date)
                 .datePickerStyle(.graphical)
                 .accentColor(Color.ui.blueGray)
-           // FormattedDate(selectedDate: selectedDate, omitTime: true)
+            
+                .onAppear {
+                    if !completedDays.contains(selectedDate) {
+                        completedDays.append(selectedDate)
+                                }
+                            }
+                .onDisappear {
+                    if let index = completedDays.firstIndex(of: selectedDate) {
+                        completedDays.remove(at: index)
+                }
+            }
         }
     }
 }

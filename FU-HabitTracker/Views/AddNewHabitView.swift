@@ -26,12 +26,12 @@ struct AddNewHabitView: View {
             HStack{
                     ForEach(1...5, id: \.self) { index in
                     
-                        let atomicOrange = Color("AtomicOrange")
+                    /*    let atomicOrange = Color("AtomicOrange")
                         let blueGray = Color("BlueGray")
                         let lightGray = Color("LightGray")
                         let lightGreen = Color("LightGreen")
                         let rosy = Color("Rosy")
-
+*/
                         Circle()
                             .fill(Color.ui.blueGray)
                             .frame(width: 30, height: 30)
