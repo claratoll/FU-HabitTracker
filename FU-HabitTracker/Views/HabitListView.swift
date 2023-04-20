@@ -11,14 +11,16 @@ struct HabitListView: View {
     
     @StateObject var habitListVM = HabitListVM()
     @State var showNewHabitSheet = false
+    @State var selectedDate = Date()
 
     var body: some View {
         VStack {
             CalendarView()
             List {
                 ForEach(habitListVM.habits){ habit in
-                    RowView(habit: habit, vm: habitListVM)
+                    RowView(habit: habit, selectedDate: selectedDate, vm: habitListVM)
                 }
+
                 .onDelete() { indexSet in
                     for index in indexSet {
                         habitListVM.delete(index: index)
