@@ -11,7 +11,6 @@ import SwiftUI
 struct RowView: View {
     let habit : Habit
     let selectedDate: Date
-    let defaultDate = Date()
     let vm : HabitListVM
     @State var isSelected = false
 
@@ -22,7 +21,7 @@ struct RowView: View {
                 Spacer()
                 Button(action : {
                     isSelected.toggle()
-                    vm.toggle(habit: habit, selectedDate: selectedDate)
+                    vm.toggle(habit: habit, selectedDate: selectedDate, done: isSelected)
                 }) {
                     Image(systemName: isSelected ? "checkmark.square.fill" : "square")
                 }

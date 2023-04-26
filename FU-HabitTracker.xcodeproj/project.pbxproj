@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D90AC0D29F0289E0010BF9C /* FormattedDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC0C29F0289E0010BF9C /* FormattedDate.swift */; };
+		1D407A1629F283F7003A39CD /* Days.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D407A1529F283F7003A39CD /* Days.swift */; };
 		1D90AC0F29F0290F0010BF9C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC0E29F0290F0010BF9C /* CalendarView.swift */; };
 		1D90AC1229F0299E0010BF9C /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 1D90AC1129F0299E0010BF9C /* FSCalendar */; };
 		1D90AC1429F045690010BF9C /* AddNewHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC1329F045690010BF9C /* AddNewHabitView.swift */; };
@@ -48,7 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D90AC0C29F0289E0010BF9C /* FormattedDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedDate.swift; sourceTree = "<group>"; };
+		1D407A1529F283F7003A39CD /* Days.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Days.swift; sourceTree = "<group>"; };
 		1D90AC0E29F0290F0010BF9C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		1D90AC1329F045690010BF9C /* AddNewHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewHabitView.swift; sourceTree = "<group>"; };
 		1DE2AA8729EE8A9400C5B044 /* FU-HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FU-HabitTracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +99,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D898A8229F91AFB00046B0E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1D407A1529F283F7003A39CD /* Days.swift */,
+				1DE2AAB429EE8D7F00C5B044 /* Habit.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		1DE2AA7E29EE8A9400C5B044 = {
 			isa = PBXGroup;
 			children = (
@@ -127,10 +136,9 @@
 				1DE2AA8A29EE8A9400C5B044 /* FU_HabitTrackerApp.swift */,
 				1DE2AA8E29EE8A9700C5B044 /* Assets.xcassets */,
 				1DE2AA9029EE8A9700C5B044 /* Preview Content */,
-				1DE2AAB429EE8D7F00C5B044 /* Habit.swift */,
 				1DE2AAB629EE8DC000C5B044 /* HabitListVM.swift */,
 				1DE2AACC29EE9C7B00C5B044 /* Extensions.swift */,
-				1D90AC0C29F0289E0010BF9C /* FormattedDate.swift */,
+				1D898A8229F91AFB00046B0E /* Model */,
 			);
 			path = "FU-HabitTracker";
 			sourceTree = "<group>";
@@ -317,8 +325,8 @@
 				1DE2AAB529EE8D7F00C5B044 /* Habit.swift in Sources */,
 				1DE2AA8D29EE8A9400C5B044 /* ContentView.swift in Sources */,
 				1DE2AACA29EE99F700C5B044 /* RowView.swift in Sources */,
+				1D407A1629F283F7003A39CD /* Days.swift in Sources */,
 				1DE2AACD29EE9C7B00C5B044 /* Extensions.swift in Sources */,
-				1D90AC0D29F0289E0010BF9C /* FormattedDate.swift in Sources */,
 				1DE2AA8B29EE8A9400C5B044 /* FU_HabitTrackerApp.swift in Sources */,
 				1D90AC0F29F0290F0010BF9C /* CalendarView.swift in Sources */,
 				1DE2AAC829EE99B200C5B044 /* HabitListView.swift in Sources */,
