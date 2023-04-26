@@ -11,8 +11,13 @@ struct HabitListView: View {
     
     @StateObject var habitListVM = HabitListVM()
     @State var showNewHabitSheet = false
-    @State var selectedDate = Date()
-
+    @State var selectedDate : Date
+    
+    init() {
+        _selectedDate = State(initialValue: Date())
+        
+    }
+    
     var body: some View {
         VStack {
             CalendarView()

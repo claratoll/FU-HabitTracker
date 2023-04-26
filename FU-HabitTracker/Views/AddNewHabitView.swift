@@ -13,9 +13,7 @@ struct AddNewHabitView: View {
     @Binding var showNewHabitSheet: Bool
     
     var body: some View {
-
             Spacer()
-
                 TextField("lägg till", text: $newHabitName)
                     .font(.title)
                     .padding()
@@ -35,26 +33,17 @@ struct AddNewHabitView: View {
                         Circle()
                             .fill(Color.ui.blueGray)
                             .frame(width: 30, height: 30)
-                        // .overlay(content: {
-                        //  if color == habitListVM.habitColor{
-                        //    Image(systemName: "checkmark")
-                        //      .font(.caption.bold())
-                        // })
                     }
                 }
 
-            
                     Button("add", action: {
                         habitListVM.saveToFirestore(habitName: newHabitName, dateAdded: Date())
                         newHabitName = ""
                         showNewHabitSheet = false
                     })
             Spacer()
-
-
-        
     }
-    }
+}
 
 /*
 struct AddNewHabitView_Previews: PreviewProvider {

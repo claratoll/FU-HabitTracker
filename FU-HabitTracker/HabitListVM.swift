@@ -17,32 +17,59 @@ class HabitListVM : ObservableObject {
     let auth = Auth.auth()
     
     
-    func toggle (habit: Habit, selectedDate : Date) {
+    func toggle (habit: Habit, selectedDate : Date, done: Bool) {
         
         guard let user = auth.currentUser else { return }
-            let habits = db.collection("users").document(user.uid).collection("habits")
+        
+        var days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+        
+        if days.habitID == habit.id {
+            
+            let daysRef = db.collection("users").document(user.uid)
+                                      .collection("habits").document(habit.id!)
+                                      .collection("days")
+            
+            
+             do {
+                 try daysRef.addDocument(from: days)
+             } catch {
+                 print("error saving to db")
+             }
 
-            if let id = habit.id {
-                let newDoneValue = !habit.done
-                let newCompletedDays: [Date]
-                if newDoneValue {
-                    // Add today's date to the completedDays array
-                    newCompletedDays = habit.completedDays + [selectedDate]
-                } else {
-                    // Remove today's date from the completedDays array
-                    newCompletedDays = habit.completedDays.filter { !Calendar.current.isDate($0, inSameDayAs: selectedDate) }
+                 
+            
+            /*let habits = db.collection("users").document(user.uid).collection("habits").document(days.habitID).collection("days")
+
+                if let id = habit.id {
+                    let newDoneValue = !habit.done
+                    let newCompletedDays: [Date]
+                    if newDoneValue {
+                        // Add today's date to the completedDays array
+                        newCompletedDays = habit.completedDays + [selectedDate]
+                    } else {
+                        // Remove today's date from the completedDays array
+                        newCompletedDays = habit.completedDays.filter { !Calendar.current.isDate($0, inSameDayAs: selectedDate) }
+                    }
+                    habits.document(id).updateData(["done": newDoneValue, "completedDays": newCompletedDays])
                 }
-                habits.document(id).updateData(["done": newDoneValue, "completedDays": newCompletedDays])
-            }
+            */
+        } else {
+            days.habitID = habit.id ?? ""
+        }
+        
+        
+        
     }
     
     func saveToFirestore(habitName : String, dateAdded: Date){
         
         guard let user = auth.currentUser else {return}
-        let habitsref = db.collection("users").document(user.uid).collection("habits")
-        
         
         let habit = Habit(name: habitName, dateAdded: dateAdded)
+        
+        let habitsref = db.collection("users").document(user.uid).collection("habits")
+        
+       
         do {
             try habitsref.addDocument(from: habit)
         } catch {

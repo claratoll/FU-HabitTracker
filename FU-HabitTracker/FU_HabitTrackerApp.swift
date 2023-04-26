@@ -20,6 +20,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct FU_HabitTrackerApp: App {
     // register app delegate for Firebase setup
       @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+
 
     var body: some Scene {
         WindowGroup {
