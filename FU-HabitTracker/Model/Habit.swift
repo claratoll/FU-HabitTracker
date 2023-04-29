@@ -16,6 +16,7 @@ struct Habit : Codable, Identifiable {
     var dateAdded: Date?
     var color: String?
     var completedDays: [Date] = []
+    var days: [Days] = []
     var streak : Int = 1
 
 }
