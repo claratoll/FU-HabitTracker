@@ -7,45 +7,44 @@
 
 import SwiftUI
 
-
 struct RowView: View {
-    let habit : Habit
+    let habit: Habit
+    let vm: HabitListVM
     let selectedDate: Date
-    let vm : HabitListVM
-    @State var isSelected = false
+    @State private var isSelected: Bool = false
 
-    var body: some View{
-        VStack(spacing: 0){
-            HStack{
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
                 Text(habit.name)
                 Spacer()
-                Button(action : {
+                Button(action: {
                     isSelected.toggle()
                     vm.toggle(habit: habit, selectedDate: selectedDate, done: isSelected)
                 }) {
                     Image(systemName: isSelected ? "checkmark.square.fill" : "square")
                 }
-
             }
             .padding(.vertical)
             .padding(.horizontal)
-            .background{
+            .background {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.ui.blueGray).opacity(0.5)
+                    .fill(Color.ui.blueGray)
+                    .opacity(0.5)
             }
-            //.background(Color.white)
-            //.cornerRadius(10)
-            
             Divider().padding(.leading, 15)
         }
+        .onAppear {
+            // Check if the habit has been completed on the selected date
+            vm.getDays(for: habit, on: selectedDate) { day in
+                isSelected = day?.done ?? false
+            }
         }
-}
-
-
-/*
-struct RowView_previews: PreviewProvider{
-    static var previews: some View{
-        RowView()
+        .onChange(of: selectedDate) { _ in
+            // Update isSelected when the selected date changes
+            vm.getDays(for: habit, on: selectedDate) { day in
+                isSelected = day?.done ?? false
+            }
+        }
     }
 }
-*/

@@ -22,54 +22,84 @@ class HabitListVM : ObservableObject {
         
         guard let user = auth.currentUser else { return }
         
-        var days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+        let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
         
         if days.habitID == habit.id {
             
             let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
-
-            let timestamp = Timestamp(date: selectedDate)
-
-            // Check if the document exists
-            let query = daysRef.whereField("completedDay", isEqualTo: timestamp)
-
-   
-            // Get the documents that match the query and delete them one by one
-            query.getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                guard let querySnapshot = querySnapshot else { return }
-                
-                print("Number of documents found: \(querySnapshot.documents.count)")
-                
-                
-                // Delete the documents one by one
-                for document in querySnapshot.documents {
-                    document.reference.delete() { error in
-                        if let error = error {
-                            print("Error removing document: \(error)")
-                        } else {
-                            print("Document successfully removed!")
+            
+          //  let timestamp = Timestamp(date: selectedDate)
+            
+            // Get all the documents in the collection
+            daysRef.getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                } else {
+                    guard let querySnapshot = querySnapshot else { return }
+                    
+                    var documentExists = false
+                    
+                    // Loop through the documents and check if a document with today's date already exists
+                    for document in querySnapshot.documents {
+                        if let documentDate = document.get("completedDay") as? Timestamp {
+                            let calendar = Calendar.current
+                            if calendar.isDate(documentDate.dateValue(), inSameDayAs: selectedDate) {
+                                documentExists = true
+                                // Update the "done" field in the existing document
+                                document.reference.updateData(["done": done]) { error in
+                                    if let error = error {
+                                        print("Error updating document: \(error)")
+                                    } else {
+                                        print("Document successfully updated!")
+                                    }
+                                }
+                                break
+                            }
+                        }
+                    }
+                    
+                    if !documentExists {
+                        // No document with today's date exists, create a new one
+                        let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+                        do {
+                            try daysRef.addDocument(from: days)
+                        } catch {
+                            print("Error saving to db")
                         }
                     }
                 }
-                
-                // Add a new document if bool is true
-                if done {
-                    let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
-                    do {
-                        try daysRef.addDocument(from: days)
-                    } catch {
-                        print("Error saving to db")
-                    }
-                }
-            }                       
             }
-        } else {
-            days.habitID = habit.id ?? ""
         }
     }
+    
+    func getDays(for habit: Habit, on date: Date, completion: @escaping (Days?) -> Void) {
+        guard let user = auth.currentUser else { return }
+        
+        let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id ?? "").collection("days")
+        
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+        
+        let query = daysRef.whereField("completedDay", isGreaterThan: Timestamp(date: startOfDay))
+                           .whereField("completedDay", isLessThan: Timestamp(date: endOfDay))
+        
+        query.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                completion(nil)
+            } else {
+                if let document = querySnapshot?.documents.first,
+                   let day = try? document.data(as: Days.self) {
+                    completion(day)
+                } else {
+                    completion(nil)
+                }
+            }
+        }
+    }
+
+
+    
     
     func saveToFirestore(habitName : String, dateAdded: Date){
         
@@ -112,8 +142,8 @@ class HabitListVM : ObservableObject {
                     }
                 }
                 
-                
             }
+            
         }
     }
     
