@@ -12,11 +12,7 @@ class HabitListVM : ObservableObject {
     
     @Published var habits = [Habit]()
     @Published var selectedDate = Date()
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> main
     let db = Firestore.firestore()
     
     let auth = Auth.auth()
@@ -39,29 +35,20 @@ class HabitListVM : ObservableObject {
             // Check if the document exists
             let query = daysRef.whereField("completedDay", isEqualTo: timestamp)
             
-<<<<<<< HEAD
-            let timestamp = Timestamp(date: selectedDate)
-
-            // Check if the document exists
-            let query = daysRef.whereField("completedDay", isEqualTo: timestamp)
-
-              
-                 
-            
          
-                       // Get the documents that match the query and delete them one by one
-                       query.getDocuments { (querySnapshot, error) in
-                           if let error = error {
-                               print("Error getting documents: \(error)")
-                           } else {
-                               guard let querySnapshot = querySnapshot else { return }
+            // Get the documents that match the query and delete them one by one
+             query.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                guard let querySnapshot = querySnapshot else { return }
 
-                               print("Number of documents found: \(querySnapshot.documents.count)")
+                print("Number of documents found: \(querySnapshot.documents.count)")
 
                          
-                               // Delete the documents one by one
-                               for document in querySnapshot.documents {
-                                   document.reference.delete() { error in
+                // Delete the documents one by one
+                for document in querySnapshot.documents {
+                    document.reference.delete() { error in
                                        if let error = error {
                                            print("Error removing document: \(error)")
                                        } else {
@@ -70,42 +57,6 @@ class HabitListVM : ObservableObject {
                                    }
                                }
 
-                               // Add a new document if bool is true
-                               if done {
-                                   let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
-                                   do {
-                                       try daysRef.addDocument(from: days)
-                                   } catch {
-                                       print("Error saving to db")
-                                   }
-                               }
-                       
-                           }
-                       
-                       }
-=======
-            print("hello")
-            
-            // Get the documents that match the query and delete them one by one
-            query.getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                } else {
-                    guard let querySnapshot = querySnapshot else { return }
-                    
-                    print("Number of documents found: \(querySnapshot.documents.count)")
-
-                    // Delete the documents one by one
-                    for document in querySnapshot.documents {
-                        document.reference.delete() { error in
-                            if let error = error {
-                                print("Error removing document: \(error)")
-                            } else {
-                                print("Document successfully removed!")
-                            }
-                        }
-                    }
-                    
                     // Add a new document if bool is true
                     if done {
                         let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
@@ -117,7 +68,7 @@ class HabitListVM : ObservableObject {
                     }
                 }
             }
->>>>>>> main
+
         } else {
             days.habitID = habit.id ?? ""
         }
