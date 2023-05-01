@@ -15,12 +15,11 @@ struct HabitListView: View {
     
     init() {
         _selectedDate = State(initialValue: Date())
-        
     }
     
     var body: some View {
         VStack {
-            CalendarView()
+            CalendarView(selectedDate: $selectedDate)
             List {
                 ForEach(habitListVM.habits){ habit in
                     RowView(habit: habit, selectedDate: selectedDate, vm: habitListVM)
