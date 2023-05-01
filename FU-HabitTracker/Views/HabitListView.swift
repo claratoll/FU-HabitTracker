@@ -20,45 +20,42 @@ struct HabitListView: View {
     
   
     
-    
     var body: some View {
-        
-        let filteredHabits = habitListVM.habits.filter { habit in
-            let days = habit.days.filter { day in
-                Calendar.current.isDate(day.completedDay, inSameDayAs: habitListVM.selectedDate)
-            }
-            return !days.isEmpty
-        }
-        
-        VStack {
             
-            CalendarView(selectedDate: $selectedDate)
+            /*let filteredHabits = habitListVM.habits.filter { habit in
+                        let days = habit.days.filter { day in
+                            Calendar.current.isDate(day.completedDay, inSameDayAs: habitListVM.selectedDate)
+                        }
+                        return !days.isEmpty
+                    }*/
             
-            List {
-                ForEach(filteredHabits){ habit in
-                    RowView(habit: habit, selectedDate: habitListVM.selectedDate, vm: habitListVM)
-                }
-               
-                .onDelete() { indexSet in
-                    for index in indexSet {
-                        habitListVM.delete(index: index)
+            VStack {
+                CalendarView(selectedDate: $selectedDate)
+                List {
+                    ForEach(habitListVM.habits){ habit in
+                        RowView(habit: habit, selectedDate: selectedDate, vm: habitListVM)
+                    }
+
+                    .onDelete() { indexSet in
+                        for index in indexSet {
+                            habitListVM.delete(index: index)
+                        }
                     }
                 }
-            }
-            Button(action: {
-                showNewHabitSheet = true
-            }) {
-                Text("Add")
-            }
+                Button(action: {
+                    showNewHabitSheet = true
+                }) {
+                    Text("Add")
+                }
 
-            .sheet(isPresented: $showNewHabitSheet) {
-                AddNewHabitView(showNewHabitSheet: $showNewHabitSheet)
-            }
+                .sheet(isPresented: $showNewHabitSheet) {
+                    AddNewHabitView(showNewHabitSheet: $showNewHabitSheet)
+                }
 
-        }
-  
-        .onAppear(){
-            habitListVM.listenToFirestore()
+            }
+      
+            .onAppear(){
+                habitListVM.listenToFirestore()
+            }
         }
     }
-}
