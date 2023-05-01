@@ -11,6 +11,7 @@ import Firebase
 class HabitListVM : ObservableObject {
     
     @Published var habits = [Habit]()
+    @Published var selectedDate = Date()
     
     let db = Firestore.firestore()
     
@@ -30,29 +31,49 @@ class HabitListVM : ObservableObject {
                                       .collection("days")
             
             
-             do {
-                 try daysRef.addDocument(from: days)
-             } catch {
-                 print("error saving to db")
-             }
+            let timestamp = Timestamp(date: selectedDate)
 
+            // Check if the document exists
+            let query = daysRef.whereField("completedDay", isEqualTo: timestamp)
+
+              
                  
             
-            /*let habits = db.collection("users").document(user.uid).collection("habits").document(days.habitID).collection("days")
+         
+                       // Get the documents that match the query and delete them one by one
+                       query.getDocuments { (querySnapshot, error) in
+                           if let error = error {
+                               print("Error getting documents: \(error)")
+                           } else {
+                               guard let querySnapshot = querySnapshot else { return }
 
-                if let id = habit.id {
-                    let newDoneValue = !habit.done
-                    let newCompletedDays: [Date]
-                    if newDoneValue {
-                        // Add today's date to the completedDays array
-                        newCompletedDays = habit.completedDays + [selectedDate]
-                    } else {
-                        // Remove today's date from the completedDays array
-                        newCompletedDays = habit.completedDays.filter { !Calendar.current.isDate($0, inSameDayAs: selectedDate) }
-                    }
-                    habits.document(id).updateData(["done": newDoneValue, "completedDays": newCompletedDays])
-                }
-            */
+                               print("Number of documents found: \(querySnapshot.documents.count)")
+
+                         
+                               // Delete the documents one by one
+                               for document in querySnapshot.documents {
+                                   document.reference.delete() { error in
+                                       if let error = error {
+                                           print("Error removing document: \(error)")
+                                       } else {
+                                           print("Document successfully removed!")
+                                       }
+                                   }
+                               }
+
+                               // Add a new document if bool is true
+                               if done {
+                                   let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+                                   do {
+                                       try daysRef.addDocument(from: days)
+                                   } catch {
+                                       print("Error saving to db")
+                                   }
+                               }
+                       
+                           }
+                       
+                       }
         } else {
             days.habitID = habit.id ?? ""
         }
