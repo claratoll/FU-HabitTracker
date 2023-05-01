@@ -24,7 +24,7 @@ struct HabitListView: View {
                 CalendarView(selectedDate: $selectedDate)
                 List {
                     ForEach(habitListVM.habits){ habit in
-                        RowView(habit: habit, selectedDate: selectedDate, vm: habitListVM)
+                        RowView(habit: habit, vm: habitListVM, selectedDate: selectedDate)
                     }
 
 
