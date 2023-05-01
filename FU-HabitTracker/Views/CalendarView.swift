@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct CalendarView: View {
+
     @Binding var selectedDate : Date 
+
     @State var completedDays: [Date] = []
+
     
     var body: some View {
         VStack {

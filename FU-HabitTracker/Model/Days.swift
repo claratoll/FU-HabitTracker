@@ -11,5 +11,5 @@ import SwiftUI
 struct Days : Codable {
     var habitID : String
     var completedDay : Date
-    var done : Bool
+    var done : Bool = false
 }
