@@ -11,6 +11,7 @@
 		1D90AC0F29F0290F0010BF9C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC0E29F0290F0010BF9C /* CalendarView.swift */; };
 		1D90AC1229F0299E0010BF9C /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 1D90AC1129F0299E0010BF9C /* FSCalendar */; };
 		1D90AC1429F045690010BF9C /* AddNewHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90AC1329F045690010BF9C /* AddNewHabitView.swift */; };
+		1DCF4CDB2A00059E006C1C29 /* SingleHabitSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCF4CDA2A00059E006C1C29 /* SingleHabitSheet.swift */; };
 		1DE2AA8B29EE8A9400C5B044 /* FU_HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE2AA8A29EE8A9400C5B044 /* FU_HabitTrackerApp.swift */; };
 		1DE2AA8D29EE8A9400C5B044 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE2AA8C29EE8A9400C5B044 /* ContentView.swift */; };
 		1DE2AA8F29EE8A9700C5B044 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DE2AA8E29EE8A9700C5B044 /* Assets.xcassets */; };
@@ -51,6 +52,7 @@
 		1D407A1529F283F7003A39CD /* Days.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Days.swift; sourceTree = "<group>"; };
 		1D90AC0E29F0290F0010BF9C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		1D90AC1329F045690010BF9C /* AddNewHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewHabitView.swift; sourceTree = "<group>"; };
+		1DCF4CDA2A00059E006C1C29 /* SingleHabitSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleHabitSheet.swift; sourceTree = "<group>"; };
 		1DE2AA8729EE8A9400C5B044 /* FU-HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FU-HabitTracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DE2AA8A29EE8A9400C5B044 /* FU_HabitTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FU_HabitTrackerApp.swift; sourceTree = "<group>"; };
 		1DE2AA8C29EE8A9400C5B044 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				1DE2AA8C29EE8A9400C5B044 /* ContentView.swift */,
 				1D90AC0E29F0290F0010BF9C /* CalendarView.swift */,
 				1D90AC1329F045690010BF9C /* AddNewHabitView.swift */,
+				1DCF4CDA2A00059E006C1C29 /* SingleHabitSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				1DE2AACA29EE99F700C5B044 /* RowView.swift in Sources */,
 				1D407A1629F283F7003A39CD /* Days.swift in Sources */,
 				1DE2AACD29EE9C7B00C5B044 /* Extensions.swift in Sources */,
+				1DCF4CDB2A00059E006C1C29 /* SingleHabitSheet.swift in Sources */,
 				1DE2AA8B29EE8A9400C5B044 /* FU_HabitTrackerApp.swift in Sources */,
 				1D90AC0F29F0290F0010BF9C /* CalendarView.swift in Sources */,
 				1DE2AAC829EE99B200C5B044 /* HabitListView.swift in Sources */,

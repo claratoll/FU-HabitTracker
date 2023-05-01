@@ -98,8 +98,6 @@ class HabitListVM : ObservableObject {
         }
     }
 
-
-    
     
     func saveToFirestore(habitName : String, dateAdded: Date){
         
