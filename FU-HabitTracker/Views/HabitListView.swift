@@ -17,37 +17,38 @@ struct HabitListView: View {
         _selectedDate = State(initialValue: Date())
     }
     
-  
+    
     
     var body: some View {
-            VStack {
-                CalendarView(selectedDate: $selectedDate)
-                List {
-                    ForEach(habitListVM.habits){ habit in
-                        RowView(habit: habit, vm: habitListVM, selectedDate: selectedDate)
+        VStack {
+            CalendarView(selectedDate: $selectedDate)
+            
+            List {
+                ForEach(habitListVM.habits){ habit in
+                    RowView(habit: habit, vm: habitListVM, selectedDate: selectedDate)
+                }
+            
+                .onDelete() { indexSet in
+                    for index in indexSet {
+                        habitListVM.delete(index: index)
                     }
-
-
-                    .onDelete() { indexSet in
-                        for index in indexSet {
-                            habitListVM.delete(index: index)
-                        }
-                    }
                 }
-                Button(action: {
-                    showNewHabitSheet = true
-                }) {
-                    Text("Add")
-                }
-
-                .sheet(isPresented: $showNewHabitSheet) {
-                    AddNewHabitView(showNewHabitSheet: $showNewHabitSheet)
-                }
-
             }
-      
-            .onAppear(){
-                habitListVM.listenToFirestore()
+            Button(action: {
+                showNewHabitSheet = true
+            }) {
+                Text("Add")
             }
+            
+            .sheet(isPresented: $showNewHabitSheet) {
+                AddNewHabitView(showNewHabitSheet: $showNewHabitSheet)
+            }
+            
+        }
+        
+        .onAppear(){
+            habitListVM.listenToFirestore()
         }
     }
+}
+

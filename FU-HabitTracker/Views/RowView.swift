@@ -12,11 +12,17 @@ struct RowView: View {
     let vm: HabitListVM
     let selectedDate: Date
     @State private var isSelected: Bool = false
+    @State private var showingSheet = false
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text(habit.name)
+                
+                    Button("\(habit.name)") {
+                        showingSheet.toggle()
+                    }
+                    .sheet(isPresented: $showingSheet, content: {SingleHabitSheet(habit: habit)})
+                
                 Spacer()
                 Button(action: {
                     isSelected.toggle()
