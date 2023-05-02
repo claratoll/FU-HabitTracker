@@ -35,6 +35,9 @@ class HabitListVM : ObservableObject {
         let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
         let habitsRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!)
         
+        
+        
+        
         daysRef.getDocuments{ (querySnapshot, error) in
             if let error = error {
                 print("error getting documents: \(error)")
@@ -69,12 +72,15 @@ class HabitListVM : ObservableObject {
                     if firstDateWithoutTime == todaysDateWithoutTime {
                         streak += 1
                         print("streak \(streak)")
-                    } else {
-                        streak = 0
-                        print("no streak added")
+                        
                     }
+                } else {
+                    streak = 0
+                    print("no streak added")
                 }
                 
+                
+                //adding more streaks
                 for index in 0..<complDays.count-1 {
                     let daysBetween = calendar.dateComponents([.day], from: complDays[index+1], to: complDays[index]).day
                     if daysBetween == 1 {
@@ -83,16 +89,15 @@ class HabitListVM : ObservableObject {
                     } else if daysBetween != nil {
                         break
                     }
-                }
-
-                print("........")
+                    print("........")
                     
-            }
-            habitsRef.updateData(["streak": streak]) { error in
-                if let error = error {
-                    print("error updating habit streak: \(error)")
                 }
-                
+                habitsRef.updateData(["streak": streak]) { error in
+                    if let error = error {
+                        print("error updating habit streak: \(error)")
+                    }
+                    
+                }
             }
         }
         
@@ -109,7 +114,7 @@ class HabitListVM : ObservableObject {
              - om skillnaden är mer än 1 -> sätt streak till 0
              
              */
-            
+           
     }
         
     func toggle (habit: Habit, selectedDate : Date, done: Bool) {
