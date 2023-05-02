@@ -11,6 +11,7 @@ import Firebase
 class HabitListVM : ObservableObject {
     
     @Published var habits = [Habit]()
+    @Published var days = [Days]()
     @Published var selectedDate = Date()
     
     
@@ -34,82 +35,69 @@ class HabitListVM : ObservableObject {
         let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
         let habitsRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!)
         
-        
-        
-        
         daysRef.getDocuments{ (querySnapshot, error) in
             if let error = error {
                 print("error getting documents: \(error)")
             } else if let documents = querySnapshot?.documents {
-                for document in documents{
+                streak = 0
+                print("streak 2 \(streak)")
+                
+                //create an array of the days.completedDay - days and sort them with the latest date (today) as the first place.
+                
+                var complDays : [Date] = []
+                for document in documents {
                     let data = document.data()
-                    if let dateTracker = data["completedDay"] as? [Timestamp] {
-                        if dateTracker.contains(where: { calendar.isDate($0.dateValue(), inSameDayAs: todaysDate) }){
-                            streak += 1}
+                    let isCompleted = data["done"] as! Bool
+                    if isCompleted{
+                        let completedDate = data["completedDay"] as! Timestamp
+                        complDays.append(completedDate.dateValue())
                         
-                        // Check if habit was done yesterday and compute streak
-                        if let yesterday = calendar.date(byAdding: .day, value: -1, to: todaysDate),
-                           dateTracker.contains(where: { calendar.isDate($0.dateValue(), inSameDayAs: yesterday) }) {
-                            streak += 1
-                            
-                            // Continue checking back one day at a time
-                            var currentDay = yesterday
-                            while let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDay),
-                                  dateTracker.contains(where: { calendar.isDate($0.dateValue(), inSameDayAs: previousDay) }) {
-                                streak += 1
-                                currentDay = previousDay
-                            }
-                        }
+                    }
+                }
+                complDays.sort(by: { $0 > $1})
+                
+                for date in complDays {
+                    print(date)
+                }
+                
+                if let firstDate = complDays.first{
+                    let firstDateComponents = calendar.dateComponents([.year, .month, .day], from: firstDate)
+                    let firstDateWithoutTime = calendar.date(from: firstDateComponents)!
+                    let todaysDateComponents = calendar.dateComponents([.year, .month, .day], from: todaysDate)
+                    let todaysDateWithoutTime = calendar.date(from: todaysDateComponents)!
+                    
+                    if firstDateWithoutTime == todaysDateWithoutTime {
+                        streak += 1
+                        print("streak \(streak)")
+                    } else {
+                        streak = 0
+                        print("no streak added")
                     }
                 }
                 
-                habitsRef.updateData(["streak": streak])
-                
-            } else {
-                print("Habit document does not exist")
+                for index in 0..<complDays.count-1 {
+                    let daysBetween = calendar.dateComponents([.day], from: complDays[index+1], to: complDays[index]).day
+                    if daysBetween == 1 {
+                        streak += 1
+                        print("days streak \(streak)")
+                    } else if daysBetween != nil {
+                        break
+                    }
+                }
+
+                print("........")
+                    
             }
-            
+            habitsRef.updateData(["streak": streak]) { error in
+                if let error = error {
+                    print("error updating habit streak: \(error)")
+                }
+                
+            }
         }
-            
-            /*
-             
-             daysRef.getDocuments{ (querySnapshot, error) in
-             if let error = error {
-             print("error getting documents: \(error)")
-             } else if let documents = querySnapshot?.documents {
-             streak = 0
-             print("streak 2 \(streak)")
-             // Calculate the streak length based on the saved dates
-             var currentDate = endDate
-             for document in documents {
-             print("streak 3 \(streak)")
-             if let savedDate = document.data()["completedDay"] as? Date,
-             let done = document.data()["done"] as? Bool,
-             done == true {
-             if savedDate == currentDate {
-             streak += 1
-             currentDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
-             } else {
-             break
-             }
-             }
-             }
-             // If no saved dates in the streak period, streak is 0
-             if streak == 0 {
-             print("No saved dates in the streak period")
-             } else {
-             print("Streak: \(streak)")
-             
-             habitsRef.updateData(["streak": streak]) { (error) in
-             if let error = error {
-             print("Error updating streak: \(error)")
-             } else {
-             print("Streak updated: \(streak)")
-             }
-             }
-             }
-             }
-             */
+        
+    
+        
             
             /* 1. kolla om dagens datum finns i dates
              om dagens datum inte finns -> lägg till dagens datum i dates
@@ -122,9 +110,9 @@ class HabitListVM : ObservableObject {
              
              */
             
-        }
+    }
         
-        func toggle (habit: Habit, selectedDate : Date, done: Bool) {
+    func toggle (habit: Habit, selectedDate : Date, done: Bool) {
             addToStreak(habit: habit)
             
             
@@ -135,6 +123,17 @@ class HabitListVM : ObservableObject {
             if days.habitID == habit.id {
                 
                 let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
+                
+                
+             /*   daysRef.addSnapshotListener { snapshot, error in
+                    guard let snapshot = snapshot else {
+                        print("error fetching habits: \(error!)")
+                        return
+                    }
+                    
+                    
+                
+                }*/
                 
                 
                 // Get all the documents in the collection
