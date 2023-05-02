@@ -12,138 +12,254 @@ class HabitListVM : ObservableObject {
     
     @Published var habits = [Habit]()
     @Published var selectedDate = Date()
-
+    
+    
     let db = Firestore.firestore()
     
     let auth = Auth.auth()
     
     
-    func toggle (habit: Habit, selectedDate : Date, done: Bool) {
+    func addToStreak (habit: Habit){
+        var streak = habit.streak
+        let todaysDate = Date()
+        let calendar = Calendar.current
         
         guard let user = auth.currentUser else { return }
         
-        let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+        // Calculate the start and end dates for the streak
+        let endDate = Date()
         
-        if days.habitID == habit.id {
-            
-            let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
-            
-          //  let timestamp = Timestamp(date: selectedDate)
-            
-            // Get all the documents in the collection
-            daysRef.getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                } else {
-                    guard let querySnapshot = querySnapshot else { return }
-                    
-                    var documentExists = false
-                    
-                    // Loop through the documents and check if a document with today's date already exists
-                    for document in querySnapshot.documents {
-                        if let documentDate = document.get("completedDay") as? Timestamp {
-                            let calendar = Calendar.current
-                            if calendar.isDate(documentDate.dateValue(), inSameDayAs: selectedDate) {
-                                documentExists = true
-                                // Update the "done" field in the existing document
-                                document.reference.updateData(["done": done]) { error in
-                                    if let error = error {
-                                        print("Error updating document: \(error)")
-                                    } else {
-                                        print("Document successfully updated!")
-                                    }
-                                }
-                                break
+        print("Streak 1 \(streak)")
+        
+        let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
+        let habitsRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!)
+        
+        
+        
+        
+        daysRef.getDocuments{ (querySnapshot, error) in
+            if let error = error {
+                print("error getting documents: \(error)")
+            } else if let documents = querySnapshot?.documents {
+                for document in documents{
+                    let data = document.data()
+                    if let dateTracker = data["completedDay"] as? [Timestamp] {
+                        if dateTracker.contains(where: { calendar.isDate($0.dateValue(), inSameDayAs: todaysDate) }){
+                            streak += 1}
+                        
+                        // Check if habit was done yesterday and compute streak
+                        if let yesterday = calendar.date(byAdding: .day, value: -1, to: todaysDate),
+                           dateTracker.contains(where: { calendar.isDate($0.dateValue(), inSameDayAs: yesterday) }) {
+                            streak += 1
+                            
+                            // Continue checking back one day at a time
+                            var currentDay = yesterday
+                            while let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDay),
+                                  dateTracker.contains(where: { calendar.isDate($0.dateValue(), inSameDayAs: previousDay) }) {
+                                streak += 1
+                                currentDay = previousDay
                             }
                         }
                     }
-                    
-                    if !documentExists {
-                        // No document with today's date exists, create a new one
-                        let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
-                        do {
-                            try daysRef.addDocument(from: days)
-                        } catch {
-                            print("Error saving to db")
+                }
+                
+                habitsRef.updateData(["streak": streak])
+                
+            } else {
+                print("Habit document does not exist")
+            }
+            
+        }
+            
+            /*
+             
+             daysRef.getDocuments{ (querySnapshot, error) in
+             if let error = error {
+             print("error getting documents: \(error)")
+             } else if let documents = querySnapshot?.documents {
+             streak = 0
+             print("streak 2 \(streak)")
+             // Calculate the streak length based on the saved dates
+             var currentDate = endDate
+             for document in documents {
+             print("streak 3 \(streak)")
+             if let savedDate = document.data()["completedDay"] as? Date,
+             let done = document.data()["done"] as? Bool,
+             done == true {
+             if savedDate == currentDate {
+             streak += 1
+             currentDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+             } else {
+             break
+             }
+             }
+             }
+             // If no saved dates in the streak period, streak is 0
+             if streak == 0 {
+             print("No saved dates in the streak period")
+             } else {
+             print("Streak: \(streak)")
+             
+             habitsRef.updateData(["streak": streak]) { (error) in
+             if let error = error {
+             print("Error updating streak: \(error)")
+             } else {
+             print("Streak updated: \(streak)")
+             }
+             }
+             }
+             }
+             */
+            
+            /* 1. kolla om dagens datum finns i dates
+             om dagens datum inte finns -> lägg till dagens datum i dates
+             om dagens datum finns -> ingenting?
+             
+             Varje gång ett datum läggs till - itierera bakifrån i listan
+             - jämför datumet med föregående datum i listan
+             - om skillnaden är 1 -> lägg på 1 i streak
+             - om skillnaden är mer än 1 -> sätt streak till 0
+             
+             */
+            
+        }
+        
+        func toggle (habit: Habit, selectedDate : Date, done: Bool) {
+            addToStreak(habit: habit)
+            
+            
+            guard let user = auth.currentUser else { return }
+            
+            let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+            
+            if days.habitID == habit.id {
+                
+                let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id!).collection("days")
+                
+                
+                // Get all the documents in the collection
+                daysRef.getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error getting documents: \(error)")
+                    } else {
+                        guard let querySnapshot = querySnapshot else { return }
+                        
+                        var documentExists = false
+                        
+                        // Loop through the documents and check if a document with today's date already exists
+                        for document in querySnapshot.documents {
+                            if let documentDate = document.get("completedDay") as? Timestamp {
+                                let calendar = Calendar.current
+                                if calendar.isDate(documentDate.dateValue(), inSameDayAs: selectedDate) {
+                                    documentExists = true
+                                    // Update the "done" field in the existing document
+                                    document.reference.updateData(["done": done]) { error in
+                                        if let error = error {
+                                            print("Error updating document: \(error)")
+                                        } else {
+                                            print("Document successfully updated!")
+                                        }
+                                    }
+                                    break
+                                }
+                            }
+                        }
+                        
+                        if !documentExists {
+                            // No document with today's date exists, create a new one
+                            let days = Days(habitID: habit.id ?? "", completedDay: selectedDate, done: done)
+                            do {
+                                try daysRef.addDocument(from: days)
+                            } catch {
+                                print("Error saving to db")
+                            }
                         }
                     }
                 }
             }
         }
-    }
     
+        
     func getDays(for habit: Habit, on date: Date, completion: @escaping (Days?) -> Void) {
-        guard let user = auth.currentUser else { return }
-        
-        let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id ?? "").collection("days")
-        
-        let startOfDay = Calendar.current.startOfDay(for: date)
-        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
-        
-        let query = daysRef.whereField("completedDay", isGreaterThan: Timestamp(date: startOfDay))
-                           .whereField("completedDay", isLessThan: Timestamp(date: endOfDay))
-        
-        query.getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-                completion(nil)
-            } else {
-                if let document = querySnapshot?.documents.first,
-                   let day = try? document.data(as: Days.self) {
-                    completion(day)
-                } else {
+            
+            //update the calendar with the days that are completed
+            //so that if the user selects a date the "done" button will update with the correct value
+            
+            guard let user = auth.currentUser else { return }
+            
+            let daysRef = db.collection("users").document(user.uid).collection("habits").document(habit.id ?? "").collection("days")
+            
+            let startOfDay = Calendar.current.startOfDay(for: date)
+            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+            
+            let query = daysRef.whereField("completedDay", isGreaterThan: Timestamp(date: startOfDay))
+                .whereField("completedDay", isLessThan: Timestamp(date: endOfDay))
+            
+            query.getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
                     completion(nil)
-                }
-            }
-        }
-    }
-
-    
-    func saveToFirestore(habitName : String, dateAdded: Date){
-        
-        guard let user = auth.currentUser else {return}
-        
-        let habit = Habit(name: habitName, dateAdded: dateAdded)
-        
-        let habitsref = db.collection("users").document(user.uid).collection("habits")
-        
-       
-        do {
-            try habitsref.addDocument(from: habit)
-        } catch {
-            print("error saving to db")
-        }
-    }
-    
-    func listenToFirestore(){
-        
-        guard let user = auth.currentUser else {return}
-        let habitsref = db.collection("users").document(user.uid).collection("habits")
-        
-        
-        habitsref.addSnapshotListener(){
-            snapshot, err in
-            
-            guard let snapshot = snapshot else {return}
-            
-            if let err = err {
-                print("error getting document \(err)")
-            } else {
-                self.habits.removeAll()
-                
-                for document in snapshot.documents {
-                    do {
-                        let habit = try document.data(as : Habit.self)
-                        self.habits.append(habit)
-                    } catch {
-                        print("error reading from db")
+                } else {
+                    if let document = querySnapshot?.documents.first,
+                       let day = try? document.data(as: Days.self) {
+                        completion(day)
+                    } else {
+                        completion(nil)
                     }
                 }
+            }
+        }
+        
+        
+    func saveToFirestore(habitName : String, dateAdded: Date){
+            
+            //saves new habit to firestore
+            
+            guard let user = auth.currentUser else {return}
+            
+            let habit = Habit(name: habitName, dateAdded: dateAdded)
+            
+            let habitsref = db.collection("users").document(user.uid).collection("habits")
+            
+            
+            do {
+                try habitsref.addDocument(from: habit)
+            } catch {
+                print("error saving to db")
+            }
+        }
+        
+    func listenToFirestore(){
+            
+            //collects all habits from firestore
+            
+            guard let user = auth.currentUser else {return}
+            let habitsref = db.collection("users").document(user.uid).collection("habits")
+            
+            
+            habitsref.addSnapshotListener(){
+                snapshot, err in
+                
+                guard let snapshot = snapshot else {return}
+                
+                if let err = err {
+                    print("error getting document \(err)")
+                } else {
+                    self.habits.removeAll()
+                    
+                    for document in snapshot.documents {
+                        do {
+                            let habit = try document.data(as : Habit.self)
+                            self.habits.append(habit)
+                        } catch {
+                            print("error reading from db")
+                        }
+                    }
+                    
+                }
                 
             }
-            
         }
-    }
     
     func delete(index: Int) {
         guard let user = auth.currentUser else {return}

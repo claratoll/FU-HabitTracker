@@ -12,6 +12,7 @@ struct HabitListView: View {
     @StateObject var habitListVM = HabitListVM()
     @State var showNewHabitSheet = false
     @State var selectedDate : Date
+    //var svm : SingleHabitVM
     
     init() {
         _selectedDate = State(initialValue: Date())
@@ -26,6 +27,7 @@ struct HabitListView: View {
             List {
                 ForEach(habitListVM.habits){ habit in
                     RowView(habit: habit, vm: habitListVM, selectedDate: selectedDate)
+                    //svm.addToStreak(habit: habit)
                 }
             
                 .onDelete() { indexSet in
