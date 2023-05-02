@@ -17,19 +17,21 @@ struct RowView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                
                     Button("\(habit.name)") {
                         showingSheet.toggle()
                     }
-                    .sheet(isPresented: $showingSheet, content: {SingleHabitSheet(habit: habit)})
-                
+                    .buttonStyle(.borderless)
+                    .sheet(isPresented: $showingSheet) {SingleHabitSheet(habit: habit)}
                 Spacer()
                 Button(action: {
                     isSelected.toggle()
                     vm.toggle(habit: habit, selectedDate: selectedDate, done: isSelected)
-                }) {
+                })
+                {
                     Image(systemName: isSelected ? "checkmark.square.fill" : "square")
                 }
+                .buttonStyle(.borderless)
+                
             }
             .padding(.vertical)
             .padding(.horizontal)
