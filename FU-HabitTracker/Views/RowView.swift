@@ -37,7 +37,7 @@ struct RowView: View {
             .padding(.horizontal)
             .background {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.ui.blueGray)
+                    .fill(Color.ui.rosy)
                     .opacity(0.5)
             }
             Divider().padding(.leading, 15)

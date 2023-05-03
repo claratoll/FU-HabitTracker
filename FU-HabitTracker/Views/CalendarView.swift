@@ -13,9 +13,10 @@ struct CalendarView: View {
 
     @State var completedDays: [Date] = []
 
-    
     var body: some View {
         VStack {
+            
+            //Shows the calendar where the user selects the date on which the habit will be done or not
             DatePicker("Select Date", selection: $selectedDate,
                        in: ...Date(), displayedComponents: .date)
                 .datePickerStyle(.graphical)
@@ -25,7 +26,6 @@ struct CalendarView: View {
                             completedDays.append(newValue)
                         }
                     }
-
                 .onAppear {
                     if !completedDays.contains(selectedDate) {
                         completedDays.append(selectedDate)
@@ -42,11 +42,3 @@ struct CalendarView: View {
 }
 
 
-
-/*
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView()
-    }
-}
-*/

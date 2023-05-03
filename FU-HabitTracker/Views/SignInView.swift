@@ -15,14 +15,18 @@ struct SignInView: View {
     var auth = Auth.auth()
     
     var body: some View{
-        Button(action: {
-            auth.signInAnonymously() {result, error in
-                if error != nil {
-                    print("error signing in")
-                } else {
-                    signedIn = true
+        HStack{
+            Button(action: {
+                auth.signInAnonymously() {result, error in
+                    if error != nil {
+                        print("error signing in")
+                    } else {
+                        signedIn = true
+                    }
                 }
-            }
-        }, label: {Text("Sign in")})
+            }, label: {Text("Sign in")})
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.ui.atomicOrange)
     }
 }
