@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct SingleHabitSheet: View {
-    let habit: Habit
-    //let svm : SingleHabitVM
-    
+    var habit: Habit
+   
     var body: some View {
         VStack{
             Spacer()
@@ -19,14 +18,8 @@ struct SingleHabitSheet: View {
             Text("You have completed your habit \(habit.streak) times")
             Spacer()
         }
-    }
-    
-    
-}
-/*
-struct SingleHabitView_Previews: PreviewProvider {
-    static var previews: some View {
-        SingleHabitView()
+        .frame(maxWidth: .infinity)
+        .background(Color.ui.atomicOrange)
     }
 }
-*/
+

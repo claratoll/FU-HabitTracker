@@ -11,14 +11,11 @@ struct HabitListView: View {
     
     @StateObject var habitListVM = HabitListVM()
     @State var showNewHabitSheet = false
-    @State var selectedDate : Date
-    //var svm : SingleHabitVM
+    @State var selectedDate : Date 
     
     init() {
         _selectedDate = State(initialValue: Date())
     }
-    
-    
     
     var body: some View {
         VStack {
@@ -27,9 +24,7 @@ struct HabitListView: View {
             List {
                 ForEach(habitListVM.habits){ habit in
                     RowView(habit: habit, vm: habitListVM, selectedDate: selectedDate)
-                    //svm.addToStreak(habit: habit)
                 }
-            
                 .onDelete() { indexSet in
                     for index in indexSet {
                         habitListVM.delete(index: index)
@@ -41,13 +36,10 @@ struct HabitListView: View {
             }) {
                 Text("Add")
             }
-            
             .sheet(isPresented: $showNewHabitSheet) {
                 AddNewHabitView(showNewHabitSheet: $showNewHabitSheet)
             }
-            
         }
-        
         .onAppear(){
             habitListVM.listenToFirestore()
         }
